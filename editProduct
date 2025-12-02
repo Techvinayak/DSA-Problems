@@ -1,0 +1,36 @@
+package com.demo.servlets;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.format.DateTimeFormatter;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.demo.bean.Products;
+import com.demo.service.ProductsService;
+import com.demo.service.ProductsServiceImpl;
+
+public class EditProduct extends HttpServlet{
+	public void doGet(HttpServletRequest req,HttpServletResponse res) throws IOException {
+		res.setContentType("text/html");
+		PrintWriter out = res.getWriter();
+	    int pid = Integer.parseInt(req.getParameter("pid"));
+		ProductsService pservice = new ProductsServiceImpl();
+		Products p=pservice.getById(pid);
+		
+		out.println("<form action='updateproduct' method='post'>");
+		out.println("Product Id: <input type='text' name='pid' id='pid' value='"+p.getPid()+"'readonly></br>");
+		out.println("Product Name: <input type='text' name='pname' id='pname' value='"+p.getPname()+"'></br>");
+		out.println("Product Quantity: <input type='text' name='qty' id='qty' value='"+p.getQty()+"'></br>");
+		out.println("Product Price: <input type='text' name='price' id='price' value='"+p.getPrice()+"'></br>");
+		String sdt=p.getExpdate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+		out.println("Product expiredate: <input type='text' name='expdate' id='expdate' value='"+sdt+"'></br>");
+		out.println("Product Cid: <input type='text' name='cid' id='cid' value='"+p.getCid()+"'></br>");
+		out.println("<button type='submit' id='update' name='update'>Update Product</button>");
+
+		out.println(" </form>");
+	}
+
+}
