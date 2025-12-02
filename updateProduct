@@ -1,0 +1,35 @@
+package com.demo.servlets;
+
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.demo.bean.Products;
+import com.demo.service.ProductsService;
+import com.demo.service.ProductsServiceImpl;
+
+public class UpdateProduct extends HttpServlet {
+	public void doPost(HttpServletRequest req , HttpServletResponse res) throws ServletException, IOException {
+		
+		int pid=Integer.parseInt(req.getParameter("pid"));
+	    String pname=req.getParameter("pname");
+		int qty =Integer.parseInt(req.getParameter("qty"));
+        double price=Double.parseDouble(req.getParameter("price"));
+		String dt=req.getParameter("expdate");
+		LocalDate ldt=LocalDate.parse(dt,DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+		int cid=Integer.parseInt(req.getParameter("cid"));
+		
+		Products p = new Products(pid,pname,qty,price,ldt,cid);
+		ProductsService pservice= new ProductsServiceImpl();
+		boolean statuse=pservice.updateproduct(p);
+		RequestDispatcher rd = req.getRequestDispatcher("showproduct");
+		rd.forward(req, res);
+	}
+
+}
